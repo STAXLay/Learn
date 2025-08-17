@@ -8,13 +8,15 @@ public class Warehouse {
 
         private final Map<Product, Integer> stock = new HashMap<>();
 
-        public double findProductPrice(String name) {
+
+
+        public Product findProduct(String name) {
             for(Map.Entry<Product, Integer> entry : stock.entrySet()) {
                 if(name.equals(entry.getKey().getName())) {
-                    return entry.getKey().getPrice();
+                    return entry.getKey();
                 }
             }
-            return -1;
+            return null;
         }
 
         public void addProduct(String name, double price, int quantity) {

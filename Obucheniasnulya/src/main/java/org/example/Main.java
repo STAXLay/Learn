@@ -42,9 +42,10 @@ public class Main {
                     System.out.println("Какая скидка?");
                     int discount = scanner.nextInt();
                     if(discount > 0) {
-                        cash.applyDiscount(warehouse.findProductPrice(nameProduct), discount);
+                        cash.applyDiscount(warehouse.findProduct(nameProduct).getPrice(), discount);
                     }
                     warehouse.sellProduct(nameProduct, quantity);
+                    cash.printReceipt(warehouse.findProduct(nameProduct), quantity);
                 default:
                     System.out.println("Неизвестная команда");
             }
