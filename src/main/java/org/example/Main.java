@@ -9,7 +9,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Warehouse warehouse = new Warehouse();
         Cash cash = new Cash();
-        int counter = 1;
         while(true) {
             System.out.println("\n1 — Добавить товар");
             System.out.println("2 — Показать склад");
