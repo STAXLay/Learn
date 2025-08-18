@@ -41,11 +41,10 @@ public class Main {
                     int quantity = scanner.nextInt();
                     System.out.println("Какая скидка?");
                     int discount = scanner.nextInt();
-                    if(discount > 0) {
-                        cash.applyDiscount(warehouse.findProduct(nameProduct).getPrice(), discount);
-                    }
+                    Product product = warehouse.findProduct(nameProduct);
                     warehouse.sellProduct(nameProduct, quantity);
-                    cash.printReceipt(warehouse.findProduct(nameProduct), quantity);
+                    cash.printReceipt(product, quantity,discount);
+                    break;
                 default:
                     System.out.println("Неизвестная команда");
             }

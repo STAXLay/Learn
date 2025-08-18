@@ -46,24 +46,31 @@ public class Warehouse {
         }
 
         public void sellProduct(String name, int quantity) {
+            boolean found = false;
             for (Map.Entry<Product, Integer> entry : stock.entrySet()) {
-                int currentQuantity = entry.getValue();
+                if(entry.getKey().getName().equalsIgnoreCase(name)) {
+                    int currentQuantity = entry.getValue();
+                    found = true;
+                    if (currentQuantity < quantity) {
+                        System.out.println("❌ Недостаточно товара на складе!");
+                        break;
+                    }
 
-                if (currentQuantity < quantity) {
-                    System.out.println("❌ Недостаточно товара на складе!");
+                    stock.put(entry.getKey(), currentQuantity - quantity);
+
+                    double totalPrice = entry.getKey().getPrice() * quantity;
+                    System.out.printf("✅ Продано %d шт. %s за %.2f руб.%n",
+                            quantity, entry.getKey().getName(), totalPrice);
+
+                    if (stock.get(entry.getKey()) == 0) {
+                        stock.remove(entry.getKey());
+                        System.out.println("Товар закончился");
+                    }
                     break;
                 }
-
-                stock.put(entry.getKey(), currentQuantity - quantity);
-
-                double totalPrice = entry.getKey().getPrice() * quantity;
-                System.out.printf("✅ Продано %d шт. %s за %.2f руб.%n",
-                        quantity, entry.getKey().getName(), totalPrice);
-
-                if (stock.get(entry.getKey()) == 0) {
-                    stock.remove(entry.getKey());
-                    System.out.println("Товар закончился");
-                }
+            }
+            if (!found) {
+                System.out.println("Товар не найден");
             }
 
         }

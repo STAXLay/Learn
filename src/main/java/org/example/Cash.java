@@ -6,8 +6,10 @@ public class Cash {
         return price*(1 - (double)discount / 100);
     }
 
-    public void printReceipt(Product product, int quantity) {
-        System.out.printf("Чек%nВаша покупка: %d %s%nза %.2f", quantity, product.getName(), product.getPrice());
+    public void printReceipt(Product product, int quantity, int discount) {
+        double finalPrice = applyDiscount(product.getPrice(), discount) * quantity;
+        System.out.printf("Чек%nВаша покупка: %d %s%nСкидка: %d%%%nИтого: %.2f руб.%n",
+                quantity, product.getName(), discount, finalPrice);
     }
 
 

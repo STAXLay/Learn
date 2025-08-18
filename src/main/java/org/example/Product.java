@@ -35,11 +35,11 @@ public class Product {
         if(this == o) return true;
         if (!(o instanceof Product)) return false;
         Product product = (Product) o;
-        return Double.compare(price, product.price) == 0 && Objects.equals(name, product.name);
+        return Objects.equals(name, product.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(price, name);
+        return Objects.hash(name);
     }
 }
