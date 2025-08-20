@@ -3,6 +3,9 @@ package org.example;
 public class Cash {
 
     public double applyDiscount(double price, int discount) {
+        if (discount < 0 || discount > 100) {
+            throw new IllegalArgumentException("Скидка должна быть от 0 до 100%");
+        }
         return price*(1 - (double)discount / 100);
     }
 

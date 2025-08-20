@@ -7,20 +7,24 @@ import java.util.Map;
 public class Warehouse {
 
         private final Map<Product, Integer> stock = new HashMap<>();
-
+        Cash cash = new Cash();
 
 
         public Product findProduct(String name) {
             for(Map.Entry<Product, Integer> entry : stock.entrySet()) {
-                if(name.equals(entry.getKey().getName())) {
+                if(name.equalsIgnoreCase(entry.getKey().getName())) {
                     return entry.getKey();
                 }
             }
-            return null;
+            throw new ProductNotFoundException("Товар '" + name + "' не найден на складе!");
         }
 
         public void addProduct(String name, double price, int quantity) {
+            if(quantity<=0 || price <0) {
+                throw new IllegalArgumentException("Цена или количество товара должна быть больше нуля!");
+            }
             Product product = new Product(name, price);
+
             stock.put(product, stock.getOrDefault(product, 0) + quantity);
         }
 
@@ -45,34 +49,28 @@ public class Warehouse {
             return sum;
         }
 
-        public void sellProduct(String name, int quantity) {
-            boolean found = false;
-            for (Map.Entry<Product, Integer> entry : stock.entrySet()) {
-                if(entry.getKey().getName().equalsIgnoreCase(name)) {
-                    int currentQuantity = entry.getValue();
-                    found = true;
-                    if (currentQuantity < quantity) {
-                        System.out.println("❌ Недостаточно товара на складе!");
-                        break;
-                    }
+        public void sellProduct(String name, int quantity, int discount) {
 
-                    stock.put(entry.getKey(), currentQuantity - quantity);
+            Product product = findProduct(name);
+            int currentQuantity = stock.get(product);
 
-                    double totalPrice = entry.getKey().getPrice() * quantity;
-                    System.out.printf("✅ Продано %d шт. %s за %.2f руб.%n",
-                            quantity, entry.getKey().getName(), totalPrice);
-
-                    if (stock.get(entry.getKey()) == 0) {
-                        stock.remove(entry.getKey());
-                        System.out.println("Товар закончился");
-                    }
-                    break;
-                }
+            if (quantity <= 0) {
+                throw new IllegalArgumentException("Количество для продажи должно быть больше нуля!");
             }
-            if (!found) {
-                System.out.println("Товар не найден");
+            if (currentQuantity < quantity) {
+                throw new NotEnoughProductException("Недостаточно товара '" + name + "' на складе!");
             }
 
+            stock.put(product, currentQuantity - quantity);
+
+            double totalPrice = cash.applyDiscount(product.getPrice(), discount) * quantity;
+            System.out.printf("✅ Продано %d шт. %s за %.2f руб.%n",
+                    quantity, product.getName(), totalPrice);
+
+            if (stock.get(product) == 0) {
+                stock.remove(product);
+                System.out.println("⚠️ Товар '" + product.getName() + "' закончился на складе.");
+            }
         }
 
 }
