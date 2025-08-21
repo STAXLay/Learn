@@ -10,6 +10,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Warehouse warehouse = new Warehouse();
         Cash cash = new Cash();
+        warehouse.loadFromFile("warehouse.txt");
         while (true) {
 
             try {
@@ -20,6 +21,7 @@ public class Main {
                 String choice = scanner.next();
 
                 if (choice.equals("0")) {
+                    warehouse.saveToFile("warehouse.txt");
                     break;
                 }
 
@@ -44,8 +46,13 @@ public class Main {
                         System.out.println("Какая скидка?");
                         int discount = scanner.nextInt();
                         Product product = warehouse.findProduct(nameProduct);
-                        warehouse.sellProduct(nameProduct, quantity, discount);
-                        cash.printReceipt(product, quantity, discount);
+                        try {
+                            warehouse.sellProduct(nameProduct, quantity, discount);
+                            cash.printReceipt(product, quantity, discount);
+                        } catch (ProductNotFoundException e) {
+                            throw new ProductNotFoundException(e.getMessage());
+                        }
+
                         break;
                     default:
                         System.out.println("Неизвестная команда");
